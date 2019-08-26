@@ -18,7 +18,6 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const getSavedToken = async () => {
       const data = await AsyncStorage.getItem(STORAGE_KEY);
-      console.log('data', data);
       setAuthState({ ...JSON.parse(data), isLoaded: true });
     };
     getSavedToken();
