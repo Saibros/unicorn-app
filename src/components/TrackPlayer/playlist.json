@@ -1,0 +1,9 @@
+[
+  {
+    "id": "111",
+    "url": "https://mycrew-unicorn-app.s3.us-west-1.amazonaws.com/unicorns.mp3?AWSAccessKeyId=AKIAUDQ2T6QKTLZK5HEM&Expires=1569348264&Signature=MPHKg8bP5weTKzOQVAhnt48kJ3E%3D",
+    "title": "Unicorn",
+    "artist": "My Crew",
+    "artwork": "https://picsum.photos/200"
+  }
+]
