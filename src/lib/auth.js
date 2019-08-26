@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import AsyncStorage from '@react-native-community/async-storage';
 import alert from 'react-native-simple-alert';
+import TrackPlayer from 'react-native-track-player';
 import { useNavigation } from './nav';
 import { useApi } from './api';
 import { useAuthContext } from './context';
@@ -27,6 +28,8 @@ export const useAuth = () => {
 
   const logout = async () => {
     setAuthState({ token: null, name: null, isLoaded: true });
+    await TrackPlayer.pause();
+    await TrackPlayer.seekTo(0);
     await AsyncStorage.removeItem(STORAGE_KEY);
     alert.show('Logged out', 'You got logged out!');
     navigation.navigate('Auth');

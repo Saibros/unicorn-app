@@ -8,39 +8,7 @@ import playlistData from './playlist.json';
 export default function TrackComponent() {
   const [isStopped, setStopped] = useState(true);
   const playbackState = usePlaybackState();
-
-  useEffect(() => {
-    TrackPlayer.setupPlayer();
-    TrackPlayer.updateOptions({
-      stopWithApp: true,
-      capabilities: [
-        TrackPlayer.CAPABILITY_PLAY,
-        TrackPlayer.CAPABILITY_PAUSE,
-        TrackPlayer.CAPABILITY_STOP,
-      ],
-      compactCapabilities: [
-        TrackPlayer.CAPABILITY_PLAY,
-        TrackPlayer.CAPABILITY_PAUSE,
-        TrackPlayer.CAPABILITY_STOP,
-      ],
-    });
-    async function setPlaylist() {
-      const currentTrack = await TrackPlayer.getCurrentTrack();
-      if (currentTrack == null) {
-        TrackPlayer.add(playlistData);
-      }
-    }
-    setPlaylist();
-  }, []);
-
   const [isReadyToPlay, setReadyToPlay] = useState(false);
-
-  useEffect(() => {
-    if (!isReadyToPlay && playbackState === TrackPlayer.STATE_READY) {
-      setReadyToPlay(true);
-    }
-  }, [playbackState]);
-
   const togglePlayback = useCallback(async () => {
     try {
       if (playbackState === TrackPlayer.STATE_PAUSED
@@ -53,7 +21,6 @@ export default function TrackComponent() {
       }
     } catch (_) {}
   }, [playbackState]);
-
   const onStopPlayback = useCallback(async () => {
     try {
       await TrackPlayer.pause();
@@ -61,6 +28,39 @@ export default function TrackComponent() {
       setStopped(true);
     } catch (_) {}
   }, []);
+
+  useEffect(() => {
+    async function setPlaylist() {
+      const currentTrack = await TrackPlayer.getCurrentTrack();
+      if (currentTrack == null) {
+        TrackPlayer.setupPlayer();
+        await TrackPlayer.updateOptions({
+          stopWithApp: true,
+          capabilities: [
+            TrackPlayer.CAPABILITY_PLAY,
+            TrackPlayer.CAPABILITY_PAUSE,
+            TrackPlayer.CAPABILITY_STOP,
+          ],
+          compactCapabilities: [
+            TrackPlayer.CAPABILITY_PLAY,
+            TrackPlayer.CAPABILITY_PAUSE,
+            TrackPlayer.CAPABILITY_STOP,
+          ],
+        });
+        TrackPlayer.add(playlistData);
+      } else {
+        setReadyToPlay(true);
+      }
+    }
+    setPlaylist();
+  }, []);
+
+  useEffect(() => {
+    if (!isReadyToPlay && playbackState === TrackPlayer.STATE_READY) {
+      setReadyToPlay(true);
+    }
+  }, [playbackState]);
+
 
   return (
     <View style={styles.container}>

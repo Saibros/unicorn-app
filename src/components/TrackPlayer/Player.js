@@ -24,7 +24,7 @@ const Player = (props) => {
     mainButtonText = 'Pause';
   }
 
-  const isConnecting = playbackState === TrackPlayer.STATE_CONNECTING;
+  const isConnecting = playbackState === TrackPlayer.STATE_CONNECTING || !isReadyToPlay;
 
   return (
     <View style={[s.card, style]}>
@@ -32,7 +32,7 @@ const Player = (props) => {
       <View style={s.controls}>
         <Button
           text={mainButtonText}
-          disabled={!isReadyToPlay || isConnecting}
+          disabled={isConnecting}
           onPress={onTogglePlayback}
           style={s.button}
           isLight
